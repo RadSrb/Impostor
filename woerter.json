@@ -73,7 +73,7 @@
   "Schnecke", "Faultier", "Bärchen", "Wutz", "Schnuckelchen",
   "Schnuffel", "Knutschkugel", "Knirps", "Wichtel", "Streber",
   "Pupskissen", "Blödelbarde", "Quatschkopf", "Dödel", "Kullerauge",
-  "Kuddelmuddel", "Mumpitz", "Quatsch", "Firlefanz", "Trödeltrupp",
+  "Kuddelmuddel", "Quatsch", "Firlefanz", "Trödeltrupp",
   "Schlingel", "Hampelmann", "Witzbold", "Lachnummer", "Ulknudel",
   "Spaßvogel", "Scherzkeks", "Kaschperl", "Tollpatsch", "Schussel",
   "Knalltüte", "Dödel", "Schluffi", "Faulpelz", "Flegel",
@@ -113,5 +113,17 @@
   "Pupskissen", "Blödelbarde", "Quatschkopf", "Dödel", "Kullerauge",
   "Kuddelmuddel", "Mumpitz", "Quatsch", "Firlefanz", "Trödeltrupp",
   "Schlingel", "Hampelmann", "Witzbold", "Lachnummer", "Ulknudel",
-  "Spaßvogel", "Scherzkeks", "Kaschperl", "Tollpatsch", "Schussel"
+  "Spaßvogel", "Scherzkeks", "Kaschperl", "Tollpatsch", "Schussel",
+  "Klo", "Flasche", "Grill", "Müll", "Knall",
+"Zahnspange", "Bierbauch", "Döner", "Bierdeckel",
+"Chips", "Schweiß", "Kaugummi", "Popcorn", "Socken",
+"Pfeffi", "Twerk", "Kopfkino", "Doppelgänger",
+"Kratzer", "Lappen", "Sonnenbrand", "Schnorchel",
+"Koksdose", "Wasserkocher", "Zahnstocher", "Kopfhörer",
+"Bierkrug", "Furz", "Quark", "Dreck",
+"Knutschfleck", "Speck", "Mief", "Schnarch",
+"Nase", "Glubsch", "Kicher", "Rum",
+"Kaffee", "Kartoffel", "Zahnfee",
+"Glühbirne", "Pups", "Kackwurst"
+
 ]
