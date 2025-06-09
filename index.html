@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,10 +15,13 @@
       min-height: 100vh;
       box-sizing: border-box;
     }
+
     * {
       box-sizing: inherit;
     }
-    input, button {
+
+    input,
+    button {
       padding: 15px;
       margin: 10px 0;
       font-size: 18px;
@@ -26,6 +30,7 @@
       border-radius: 6px;
       border: 1px solid #ccc;
     }
+
     button {
       cursor: pointer;
       background-color: #4CAF50;
@@ -33,20 +38,24 @@
       border: none;
       transition: background-color 0.3s ease;
     }
+
     button:hover {
       background-color: #45a049;
     }
+
     .hidden {
       display: none;
     }
+
     .card {
       margin: 20px auto;
       padding: 20px;
       background: white;
       border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       max-width: 400px;
     }
+
     .player-entry {
       display: flex;
       justify-content: center;
@@ -57,11 +66,13 @@
       margin-left: auto;
       margin-right: auto;
     }
+
     .player-entry input {
       flex-grow: 1;
       font-size: 18px;
       padding: 10px;
     }
+
     .player-entry button {
       width: 40px;
       font-size: 18px;
@@ -73,25 +84,32 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
+
     .player-entry button:hover {
       background-color: #c0392b;
     }
+
     @media (max-width: 480px) {
       body {
         padding: 15px 10px;
       }
-      input, button {
+
+      input,
+      button {
         font-size: 16px;
         padding: 12px;
       }
+
       .player-entry {
         flex-direction: column;
         align-items: stretch;
       }
+
       .player-entry button {
         width: 100%;
       }
     }
+
     #wordRevealButton {
       user-select: none;
       -webkit-user-select: none;
@@ -99,6 +117,7 @@
       background-color: #008CBA;
       margin-top: 20px;
     }
+
     #wordDisplay {
       margin-top: 20px;
       font-size: 24px;
@@ -109,48 +128,52 @@
       -webkit-user-select: none;
       -ms-user-select: none;
     }
+
     .player-entry {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
-  background: #fff;
-  padding: 10px 15px;
-  border-radius: 8px;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-  transition: box-shadow 0.2s ease;
-}
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      background: #fff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.2s ease;
+    }
 
-/* Entferne flex-direction Änderung für Handy */
-@media (max-width: 480px) {
-  .player-entry {
-    flex-direction: row !important; /* Erzwingt Nebeneinander auf kleineren Bildschirmen */
-  }
-  .player-entry input {
-    width: calc(100% - 50px); /* Input nimmt Platz minus Button */
-  }
-  .player-entry button {
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
-  }
-}
+    /* Entferne flex-direction Änderung für Handy */
+    @media (max-width: 480px) {
+      .player-entry {
+        flex-direction: row !important;
+        /* Erzwingt Nebeneinander auf kleineren Bildschirmen */
+      }
 
-#credits {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  text-align: center;
-}
+      .player-entry input {
+        width: calc(100% - 50px);
+        /* Input nimmt Platz minus Button */
+      }
 
+      .player-entry button {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+      }
+    }
 
+    #credits {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+    }
   </style>
 </head>
+
 <body>
   <h1>🎭 Impostor Wortspiel</h1>
 
@@ -158,19 +181,21 @@
     <div id="players"></div>
     <button onclick="addPlayer()">+ Spieler hinzufügen</button>
     <button onclick="startGame()">Spiel starten</button>
+    <div id="wordlistOptions">
+      <label><input type="checkbox" value="woerter.json" checked> gemischte Wörter</label><br>
+      <label><input type="checkbox" value="essen.json" checked> Essen</label><br>
+      <label><input type="checkbox" value="laender.json" checked> Länder</label><br>
+    </div>
+    
+
   </div>
 
   <div id="reveal" class="hidden">
     <div class="card">
       <h2 id="currentName"></h2>
-      <button id="wordRevealButton"
-              onmousedown="startPress()"
-              onmouseup="endPress()"
-              onmouseleave="endPress()"
-              ontouchstart="startPress()"
-              ontouchend="endPress()"
-              ontouchcancel="endPress()"
-      >Tippe und halte, um dein Wort zu sehen</button>
+      <button id="wordRevealButton" onmousedown="startPress()" onmouseup="endPress()" onmouseleave="endPress()"
+        ontouchstart="startPress()" ontouchend="endPress()" ontouchcancel="endPress()">Tippe und halte, um dein Wort zu
+        sehen</button>
       <div id="wordDisplay"></div>
       <button onclick="nextPlayer()">Nächster</button>
     </div>
@@ -231,11 +256,25 @@
     }
 
     function startGame() {
+  const checkedBoxes = Array.from(document.querySelectorAll('#wordlistOptions input[type="checkbox"]:checked'));
+  if (checkedBoxes.length === 0) {
+    alert("Bitte mindestens eine Wortliste auswählen!");
+    return;
+  }
+
+  const promises = checkedBoxes.map(cb => fetch(cb.value).then(res => res.json()));
+
+  Promise.all(promises)
+    .then(results => {
+      // Ergebnisse sind Arrays, die wir zu einem großen Array zusammenfügen:
+      wordList = results.flat();
+
       if (wordList.length === 0) {
-        alert("Wortliste ist noch nicht geladen. Bitte kurz warten.");
+        alert("Die ausgewählten Wortlisten sind leer!");
         return;
       }
 
+      // Spieler einlesen wie gehabt
       players = [];
       playerInputs.forEach(inp => {
         const name = inp.value.trim();
@@ -259,7 +298,12 @@
       document.getElementById('wordRevealButton').style.display = "inline-block";
 
       showName();
-    }
+    })
+    .catch(err => {
+      alert("Fehler beim Laden der Wortlisten.");
+      console.error(err);
+    });
+}
 
     function showName() {
       const name = players[currentIndex];
@@ -316,4 +360,5 @@
     addPlayer();
   </script>
 </body>
+
 </html>
