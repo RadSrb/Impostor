@@ -10,11 +10,31 @@
       background: #f0f0f0;
       padding: 20px;
       text-align: center;
+      margin: 0;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    * {
+      box-sizing: inherit;
     }
     input, button {
-      padding: 10px;
-      margin: 5px;
-      font-size: 16px;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 18px;
+      width: 90%;
+      max-width: 350px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #45a049;
     }
     .hidden {
       display: none;
@@ -32,7 +52,62 @@
       justify-content: center;
       align-items: center;
       gap: 10px;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .player-entry input {
+      flex-grow: 1;
+      font-size: 18px;
+      padding: 10px;
+    }
+    .player-entry button {
+      width: 40px;
+      font-size: 18px;
+      padding: 0;
+      background-color: #e74c3c;
+      border-radius: 6px;
+      border: none;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .player-entry button:hover {
+      background-color: #c0392b;
+    }
+    @media (max-width: 480px) {
+      body {
+        padding: 15px 10px;
+      }
+      input, button {
+        font-size: 16px;
+        padding: 12px;
+      }
+      .player-entry {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .player-entry button {
+        width: 100%;
+      }
+    }
+    #wordRevealButton {
+      user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      background-color: #008CBA;
+      margin-top: 20px;
+    }
+    #wordDisplay {
+      margin-top: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      min-height: 40px;
+      color: #333;
+      user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
     }
   </style>
 </head>
@@ -48,7 +123,15 @@
   <div id="reveal" class="hidden">
     <div class="card">
       <h2 id="currentName"></h2>
-      <p id="message"></p>
+      <button id="wordRevealButton"
+              onmousedown="startPress()"
+              onmouseup="endPress()"
+              onmouseleave="endPress()"
+              ontouchstart="startPress()"
+              ontouchend="endPress()"
+              ontouchcancel="endPress()"
+      >Tippe und halte, um dein Wort zu sehen</button>
+      <div id="wordDisplay"></div>
       <button onclick="nextPlayer()">Nächster</button>
     </div>
   </div>
@@ -66,6 +149,8 @@
     let currentIndex = 0;
     let impostorIndex = -1;
     let secretWord = "";
+
+    let pressTimer = null;
 
     // Wortliste laden
     fetch('woerter.json')
@@ -125,23 +210,50 @@
       document.getElementById('setup').classList.add('hidden');
       document.getElementById('end').classList.add('hidden');
       document.getElementById('reveal').classList.remove('hidden');
-      showWord();
+
+      document.getElementById('wordDisplay').textContent = "";
+      document.getElementById('wordRevealButton').style.display = "inline-block";
+
+      showName();
+    }
+
+    function showName() {
+      const name = players[currentIndex];
+      document.getElementById('currentName').innerText = name;
+      document.getElementById('wordDisplay').textContent = "";
+      document.getElementById('wordRevealButton').style.display = "inline-block";
+    }
+
+    function startPress() {
+      // Nach 500ms zeigen wir das Wort
+      pressTimer = setTimeout(() => {
+        showWord();
+      }, 500);
+    }
+
+    function endPress() {
+      clearTimeout(pressTimer);
+      hideWord();
     }
 
     function showWord() {
-      const name = players[currentIndex];
-      document.getElementById('currentName').innerText = name;
+      document.getElementById('wordRevealButton').style.display = "none";
       if (currentIndex === impostorIndex) {
-        document.getElementById('message').innerText = "Du bist der Impostor! Versuche das geheime Wort zu erraten.";
+        document.getElementById('wordDisplay').textContent = "Du bist der Impostor! Versuche das geheime Wort zu erraten.";
       } else {
-        document.getElementById('message').innerText = `Dein Wort ist: \"${secretWord}\"`;
+        document.getElementById('wordDisplay').textContent = secretWord;
       }
+    }
+
+    function hideWord() {
+      document.getElementById('wordDisplay').textContent = "";
+      document.getElementById('wordRevealButton').style.display = "inline-block";
     }
 
     function nextPlayer() {
       currentIndex++;
       if (currentIndex < players.length) {
-        showWord();
+        showName();
       } else {
         document.getElementById('reveal').classList.add('hidden');
         document.getElementById('end').classList.remove('hidden');
