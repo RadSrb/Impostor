@@ -109,6 +109,38 @@
       -webkit-user-select: none;
       -ms-user-select: none;
     }
+    .player-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  background: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+  transition: box-shadow 0.2s ease;
+}
+
+/* Entferne flex-direction Änderung für Handy */
+@media (max-width: 480px) {
+  .player-entry {
+    flex-direction: row !important; /* Erzwingt Nebeneinander auf kleineren Bildschirmen */
+  }
+  .player-entry input {
+    width: calc(100% - 50px); /* Input nimmt Platz minus Button */
+  }
+  .player-entry button {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+}
+
+
   </style>
 </head>
 <body>
