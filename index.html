@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Impostor Wortspiel</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+      text-align: center;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+    }
+    .hidden {
+      display: none;
+    }
+    .card {
+      margin: 20px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      max-width: 400px;
+    }
+    .player-entry {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎭 Impostor Wortspiel</h1>
+
+  <div id="setup">
+    <div id="players"></div>
+    <button onclick="addPlayer()">+ Spieler hinzufügen</button>
+    <button onclick="startGame()">Spiel starten</button>
+  </div>
+
+  <div id="reveal" class="hidden">
+    <div class="card">
+      <h2 id="currentName"></h2>
+      <p id="message"></p>
+      <button onclick="nextPlayer()">Nächster</button>
+    </div>
+  </div>
+
+  <div id="end" class="hidden">
+    <h2>Alle Spieler haben ihr Wort gesehen!</h2>
+    <button onclick="startGame()">Neue Runde starten</button>
+    <button onclick="showSetup()">Spieler bearbeiten</button>
+  </div>
+
+  <script>
+    let wordList = [];
+    const playerInputs = [];
+    let players = [];
+    let currentIndex = 0;
+    let impostorIndex = -1;
+    let secretWord = "";
+
+    // Wortliste laden
+    fetch('woerter.json')
+      .then(response => response.json())
+      .then(data => {
+        wordList = data;
+      })
+      .catch(err => {
+        alert("Fehler beim Laden der Wortliste.");
+        console.error(err);
+      });
+
+    function addPlayer(name = "") {
+      const container = document.getElementById('players');
+      const wrapper = document.createElement('div');
+      wrapper.className = 'player-entry';
+
+      const input = document.createElement('input');
+      input.placeholder = `Spieler ${playerInputs.length + 1} Name`;
+      input.value = name;
+
+      const removeBtn = document.createElement('button');
+      removeBtn.textContent = '🗑️';
+      removeBtn.onclick = () => {
+        container.removeChild(wrapper);
+        const index = playerInputs.indexOf(input);
+        if (index > -1) playerInputs.splice(index, 1);
+      };
+
+      wrapper.appendChild(input);
+      wrapper.appendChild(removeBtn);
+      container.appendChild(wrapper);
+      playerInputs.push(input);
+    }
+
+    function startGame() {
+      if (wordList.length === 0) {
+        alert("Wortliste ist noch nicht geladen. Bitte kurz warten.");
+        return;
+      }
+
+      players = [];
+      playerInputs.forEach(inp => {
+        const name = inp.value.trim();
+        if (name) players.push(name);
+      });
+
+      if (players.length < 3) {
+        alert("Mindestens 3 gültige Spielernamen eingeben.");
+        return;
+      }
+
+      secretWord = wordList[Math.floor(Math.random() * wordList.length)];
+      impostorIndex = Math.floor(Math.random() * players.length);
+      currentIndex = 0;
+
+      document.getElementById('setup').classList.add('hidden');
+      document.getElementById('end').classList.add('hidden');
+      document.getElementById('reveal').classList.remove('hidden');
+      showWord();
+    }
+
+    function showWord() {
+      const name = players[currentIndex];
+      document.getElementById('currentName').innerText = name;
+      if (currentIndex === impostorIndex) {
+        document.getElementById('message').innerText = "Du bist der Impostor! Versuche das geheime Wort zu erraten.";
+      } else {
+        document.getElementById('message').innerText = `Dein Wort ist: \"${secretWord}\"`;
+      }
+    }
+
+    function nextPlayer() {
+      currentIndex++;
+      if (currentIndex < players.length) {
+        showWord();
+      } else {
+        document.getElementById('reveal').classList.add('hidden');
+        document.getElementById('end').classList.remove('hidden');
+      }
+    }
+
+    function showSetup() {
+      document.getElementById('setup').classList.remove('hidden');
+      document.getElementById('end').classList.add('hidden');
+      document.getElementById('reveal').classList.add('hidden');
+    }
+
+    // Standardmäßig ein paar Eingabefelder
+    addPlayer();
+    addPlayer();
+    addPlayer();
+  </script>
+</body>
+</html>
