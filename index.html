@@ -229,10 +229,11 @@
     <button onclick="addPlayer()">+ Spieler hinzufügen</button>
     <button onclick="startGame()">Spiel starten</button>
     <div id="wordlistOptions">
-      <label><input type="checkbox" value="woerter.json" checked> gemischte Wörter</label>
-      <label><input type="checkbox" value="alltag.json" checked> Alltag</label>
-      <label><input type="checkbox" value="rund-um-die-welt.json" checked> Rund um die Welt</label>
-      <label><input type="checkbox" value="unterhaltung.json" checked> Unterhaltung</label>
+      <label><input type="checkbox" value="wordlists/woerter.json" checked> gemischte Wörter</label>
+      <label><input type="checkbox" value="wordlists/alltag.json" checked> Alltag</label>
+      <label><input type="checkbox" value="wordlists/rund-um-die-welt.json" checked> Rund um die Welt</label>
+      <label><input type="checkbox" value="wordlists/unterhaltung.json" checked> Unterhaltung</label>
+      <label><input type="checkbox" value="wordlists/test.json" checked> Test</label>
     </div>
     
 
@@ -269,16 +270,23 @@
 
     let pressTimer = null;
 
-    // Wortliste laden
-    fetch('woerter.json')
-      .then(response => response.json())
-      .then(data => {
-        wordList = data;
-      })
-      .catch(err => {
-        alert("Fehler beim Laden der Wortliste.");
-        console.error(err);
-      });
+    // Wortlisten beim Start laden
+    function loadInitialWordlists() {
+      const checkedBoxes = Array.from(document.querySelectorAll('#wordlistOptions input[type="checkbox"]:checked'));
+      const promises = checkedBoxes.map(cb => fetch(cb.value).then(res => res.json()));
+      
+      Promise.all(promises)
+        .then(results => {
+          wordList = results.flat();
+        })
+        .catch(err => {
+          alert("Fehler beim Laden der Wortlisten.");
+          console.error(err);
+        });
+    }
+
+    // Initial alle Wortlisten laden
+    loadInitialWordlists();
 
     function addPlayer(name = "") {
       const container = document.getElementById('players');
