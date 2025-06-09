@@ -241,6 +241,7 @@
   <div id="reveal" class="hidden">
     <div class="card">
       <h2 id="currentName"></h2>
+      <div id="startingPlayer" style="margin-top:10px; font-weight: bold; color: #555;"></div>
       <button id="wordRevealButton" onmousedown="startPress()" onmouseup="endPress()" onmouseleave="endPress()"
         ontouchstart="startPress()" ontouchend="endPress()" ontouchcancel="endPress()">Tippe und halte, um dein Wort zu
         sehen</button>
@@ -257,6 +258,7 @@
 
 
   <script>
+    let startingPlayerIndex = 0;
     let wordList = [];
     const playerInputs = [];
     let players = [];
@@ -300,7 +302,16 @@
       playerInputs.push(input);
     }
 
+    function showStartingPlayer() {
+  const startName = players[startingPlayerIndex];
+  document.getElementById('startingPlayer').innerText = `Startspieler: ${startName}`;
+}
+
+
     function startGame() {
+      startingPlayerIndex = Math.floor(Math.random() * players.length);
+currentIndex = startingPlayerIndex;
+
   const checkedBoxes = Array.from(document.querySelectorAll('#wordlistOptions input[type="checkbox"]:checked'));
   if (checkedBoxes.length === 0) {
     alert("Bitte mindestens eine Wortliste auswählen!");
@@ -343,6 +354,7 @@
       document.getElementById('wordRevealButton').style.display = "inline-block";
 
       showName();
+      showStartingPlayer();
     })
     .catch(err => {
       alert("Fehler beim Laden der Wortlisten.");
